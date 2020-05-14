@@ -1,0 +1,2 @@
+# RotaplannerReact
+Frontend for Rotaplanner
