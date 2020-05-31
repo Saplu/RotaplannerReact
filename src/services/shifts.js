@@ -6,4 +6,14 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-export default {getAll}
+const getSpecified = (group) => {
+    const request = axios.get(`${baseUrl}/${group}`)
+    return request.then(response => response.data)
+}
+
+const postData = (newObject) => {
+    const request = axios.post(baseUrl, newObject)
+    return request.then(response => response.data)
+}
+
+export default {getAll, getSpecified, postData}
