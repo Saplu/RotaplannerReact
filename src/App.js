@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import shiftService from './services/shifts'
+import wishService from './services/wishes'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
@@ -58,8 +59,8 @@ const App = () => {
       Shift: selectedShift,
       Day: selectedDay
     }
-    shiftService
-    .postData(wish)
+    wishService
+    .postWish(wish)
       .then(returnedData => {
         shiftService
           .getAll()
