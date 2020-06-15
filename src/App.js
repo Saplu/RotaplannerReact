@@ -29,15 +29,21 @@ const App = () => {
   }, [])
 
   const handleEmployeeChange = (event) => {
-    setEmployee(Number(event.target.value))
+    if (!isNaN(event.target.value) && Number(event.target.value) <= 11){
+      setEmployee(Number(event.target.value))
+    }
   }
 
   const handleShiftChange = (event) => {
-    setShift(Number(event.target.value))
+    if (!isNaN(event.target.value) && Number(event.target.value) <= 11){
+      setShift(Number(event.target.value))
+    }
   }
 
   const handleDayChange = (event) => {
-    setDay(Number(event.target.value))
+    if (!isNaN(event.target.value) && Number(event.target.value) <= 14){
+      setDay(Number(event.target.value))
+    }
   }
 
   const postData = (event) => {
