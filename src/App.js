@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import shiftService from './services/shifts'
 import wishService from './services/wishes'
+import Wish from './components/wish'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
@@ -9,12 +10,21 @@ const App = () => {
   const [selectedEmployee, setEmployee] = useState(0)
   const [selectedShift, setShift] = useState(0)
   const [selectedDay, setDay] = useState(0)
+  const [wishes, setWishes] = useState([])
 
   useEffect(() => {
     shiftService
       .getAll()
       .then(newShifts => {
         setShifts(newShifts)
+      })
+  }, [])
+
+  useEffect(() => {
+    wishService
+      .getAll()
+      .then(newWishes => {
+        setWishes(newWishes)
       })
   }, [])
 
@@ -35,7 +45,6 @@ const App = () => {
     const groupObject = {
       OpenGroup: group
     }
-    console.log(shiftService)
     shiftService
     .postData(groupObject)
       .then(returnedData => {
@@ -48,26 +57,25 @@ const App = () => {
   }
 
   const handleGroupChange = (event) => {
-    console.log(event)
     setGroup(event)
   }
 
-  const addWish = (event) => {
+  const addWish = async (event) => {
     event.preventDefault()
     const wish = {
       EmpId: selectedEmployee,
       Shift: selectedShift,
       Day: selectedDay
     }
-    wishService
-    .postWish(wish)
-      .then(returnedData => {
-        shiftService
-          .getAll()
-          .then(newShifts => {
-            setShifts(newShifts)
-          })
-      })
+    await wishService.postWish(wish)
+    setShifts(await shiftService.getAll())
+    setWishes(await wishService.getAll())
+  }
+
+  const deleteWish = async id => {
+    await wishService.deleteWish(id)
+    setWishes(await wishService.getAll())
+    setShifts(await shiftService.getAll())
   }
 
   return (
@@ -106,6 +114,14 @@ const App = () => {
       {shifts.split('\n').map((i,key) => {
         return <div key={key}>{i}</div>
       })}
+    </div>
+    <div>
+      {wishes.map(wish =>
+        <Wish key={wish.id}
+        wish={wish}
+        deleteClick={deleteWish}
+      />
+      )}
     </div>
   </div>
   );
