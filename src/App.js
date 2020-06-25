@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import shiftService from './services/shifts'
 import wishService from './services/wishes'
+import daycareService from './services/DaycareService'
 import Wish from './components/wish'
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [selectedShift, setShift] = useState(0)
   const [selectedDay, setDay] = useState(0)
   const [wishes, setWishes] = useState([])
+  const [selectedDc, setDc] = useState(0)
 
   useEffect(() => {
     shiftService
@@ -44,6 +46,18 @@ const App = () => {
     if (!isNaN(event.target.value) && Number(event.target.value) <= 14){
       setDay(Number(event.target.value))
     }
+  }
+
+  const handleDcChange = async (event) => {
+    event.preventDefault()
+    selectedDc === 0 ?
+      setDc(1) :
+      setDc(0)
+    const Dc = {
+      Dc: selectedDc
+    }
+    console.log(await daycareService.changeDc(Dc))
+    setShifts(await shiftService.getAll())
   }
 
   const postData = (event) => {
@@ -120,6 +134,9 @@ const App = () => {
       {shifts.split('\n').map((i,key) => {
         return <div key={key}>{i}</div>
       })}
+    </div>
+    <div>
+      <button onClick={handleDcChange}>change daycare</button>
     </div>
     <div>
       {wishes.map(wish =>
