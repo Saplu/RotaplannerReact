@@ -6,4 +6,9 @@ const changeDc = async (newDc) => {
     return response.data
 }
 
-export default { changeDc }
+const getGroups = async(id) => {
+    const response = await axios.get(`${baseUrl}/${id}`)
+    return response.data
+}
+
+export default { changeDc, getGroups }

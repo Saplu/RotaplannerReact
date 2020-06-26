@@ -4,6 +4,7 @@ import shiftService from './services/shifts'
 import wishService from './services/wishes'
 import daycareService from './services/DaycareService'
 import Wish from './components/wish'
+import GroupButton from './components/GroupButton'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
@@ -13,6 +14,7 @@ const App = () => {
   const [selectedDay, setDay] = useState(0)
   const [wishes, setWishes] = useState([])
   const [selectedDc, setDc] = useState(0)
+  const [dcTeams, setDcTeams] = useState([])
 
   useEffect(() => {
     shiftService
@@ -27,6 +29,13 @@ const App = () => {
       .getAll()
       .then(newWishes => {
         setWishes(newWishes)
+      })
+  }, [])
+
+  useEffect(() => {
+    daycareService.getGroups(0)
+      .then(newGroups => {
+        setDcTeams(newGroups)
       })
   }, [])
 
@@ -56,8 +65,10 @@ const App = () => {
     const Dc = {
       Dc: selectedDc
     }
-    console.log(await daycareService.changeDc(Dc))
+    setGroup(0)
+    await daycareService.changeDc(Dc)
     setShifts(await shiftService.getAll())
+    setDcTeams(await daycareService.getGroups(selectedDc))
   }
 
   const postData = (event) => {
@@ -102,10 +113,12 @@ const App = () => {
     <div>
     <p>Select opening group:</p>
     <div>
-      <button onClick={() => handleGroupChange(0)}>1</button>
-      <button onClick={() => handleGroupChange(1)}>2</button>
-      <button onClick={() => handleGroupChange(2)}>3</button>
-      <button onClick={() => handleGroupChange(3)}>4</button>
+      {dcTeams.map(team => 
+        <GroupButton key={team}
+          team={team}
+          activateClick={handleGroupChange}
+        />
+        )}
       <button onClick={postData}>Get shifts</button>
     </div>
     <div>
