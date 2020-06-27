@@ -59,16 +59,15 @@ const App = () => {
 
   const handleDcChange = async (event) => {
     event.preventDefault()
-    selectedDc === 0 ?
-      setDc(1) :
-      setDc(0)
+    const dcValue = (selectedDc === 0) ? 1 : 0
+    setDc(dcValue)
     const Dc = {
-      Dc: selectedDc
+      Dc: dcValue
     }
     setGroup(0)
     await daycareService.changeDc(Dc)
     setShifts(await shiftService.getAll())
-    setDcTeams(await daycareService.getGroups(selectedDc))
+    setDcTeams(await daycareService.getGroups(dcValue))
   }
 
   const postData = (event) => {
