@@ -17,10 +17,21 @@ const App = () => {
   const [dcTeams, setDcTeams] = useState([])
 
   useEffect(() => {
-    shiftService
-      .getAll()
+    const Dc = {
+      Dc: 0
+    }
+    const groupObject = {
+      OpenGroup: 0
+    }
+    daycareService.changeDc(Dc)
+    shiftService.postData(groupObject)
+    shiftService.getDefault(0)
       .then(newShifts => {
         setShifts(newShifts)
+      })
+    daycareService.getGroups(0)
+      .then(newGroups => {
+        setDcTeams(newGroups)
       })
   }, [])
 
@@ -32,21 +43,14 @@ const App = () => {
       })
   }, [])
 
-  useEffect(() => {
-    daycareService.getGroups(0)
-      .then(newGroups => {
-        setDcTeams(newGroups)
-      })
-  }, [])
-
   const handleEmployeeChange = (event) => {
-    if (!isNaN(event.target.value) && Number(event.target.value) <= 11){
+    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
       setEmployee(Number(event.target.value))
     }
   }
 
   const handleShiftChange = (event) => {
-    if (!isNaN(event.target.value) && Number(event.target.value) <= 11){
+    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
       setShift(Number(event.target.value))
     }
   }
@@ -56,18 +60,31 @@ const App = () => {
       setDay(Number(event.target.value))
     }
   }
+  
+  const handleGroupChange = async (event) => {
+    await setGroup(event)
+  }
 
   const handleDcChange = async (event) => {
     event.preventDefault()
+    if (window.confirm("Sure you want to change daycare? Your selected options will be lost.")){
+
+    
     const dcValue = (selectedDc === 0) ? 1 : 0
     setDc(dcValue)
     const Dc = {
       Dc: dcValue
     }
     setGroup(0)
+    await wishService.deleteAll()
+    setWishes([])
     await daycareService.changeDc(Dc)
-    setShifts(await shiftService.getAll())
+    setShifts(await shiftService.getDefault(dcValue))
     setDcTeams(await daycareService.getGroups(dcValue))
+    setEmployee(0)
+    setShift(0)
+    setDay(0)
+  }
   }
 
   const postData = (event) => {
@@ -84,10 +101,6 @@ const App = () => {
             setShifts(newShifts)
           })
       })
-  }
-
-  const handleGroupChange = (event) => {
-    setGroup(event)
   }
 
   const addWish = async (event) => {

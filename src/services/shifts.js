@@ -6,7 +6,7 @@ const getAll = () => {
     return request.then(response => response.data)
 }
 
-const getSpecified = (group) => {
+const getDefault = (group) => {
     const request = axios.get(`${baseUrl}/${group}`)
     return request.then(response => response.data)
 }
@@ -16,4 +16,4 @@ const postData = (newObject) => {
     return request.then(response => response.data)
 }
 
-export default {getAll, getSpecified, postData}
+export default {getAll, getDefault, postData}

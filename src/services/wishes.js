@@ -18,4 +18,10 @@ const deleteWish = async id => {
     return response.data
 }
 
-export default {getAll, postWish, deleteWish}
+const deleteAll = async() => {
+    const response = await axios.delete(baseUrl)
+    console.log(response.data)
+    return response.data
+}
+
+export default {getAll, postWish, deleteWish, deleteAll}
