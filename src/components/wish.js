@@ -9,7 +9,7 @@ const Wish = ({ deleteClick, wish }) => {
 
    return (
      <div>
-       {wish.empId} , {wish.day} , {wish.shift} <button onClick={handleDeleteButtonClick}>Remove</button>
+       {wish.empId} , {wish.shift} , {wish.day} <button onClick={handleDeleteButtonClick}>Remove</button>
      </div>
    )
 }

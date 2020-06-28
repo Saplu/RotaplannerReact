@@ -20,7 +20,6 @@ const deleteWish = async id => {
 
 const deleteAll = async() => {
     const response = await axios.delete(baseUrl)
-    console.log(response.data)
     return response.data
 }
 

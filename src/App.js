@@ -17,23 +17,19 @@ const App = () => {
   const [dcTeams, setDcTeams] = useState([])
 
   useEffect(() => {
-    const Dc = {
-      Dc: 0
-    }
-    const groupObject = {
-      OpenGroup: 0
-    }
-    daycareService.changeDc(Dc)
-    shiftService.postData(groupObject)
-    shiftService.getDefault(0)
+    shiftService.getAll()
       .then(newShifts => {
         setShifts(newShifts)
       })
-    daycareService.getGroups(0)
+    daycareService.getDefaultGroups()
+      .then(newDc => {
+        setDc(newDc)
+      })
+    daycareService.getGroups(selectedDc)
       .then(newGroups => {
         setDcTeams(newGroups)
       })
-  }, [])
+  }, [selectedDc])
 
   useEffect(() => {
     wishService
@@ -68,23 +64,22 @@ const App = () => {
   const handleDcChange = async (event) => {
     event.preventDefault()
     if (window.confirm("Sure you want to change daycare? Your selected options will be lost.")){
-
-    
-    const dcValue = (selectedDc === 0) ? 1 : 0
-    setDc(dcValue)
-    const Dc = {
-      Dc: dcValue
+      const dcValue = (selectedDc === 0) ? 1 : 0
+      setDc(dcValue)
+      const Dc = {
+        Dc: dcValue
+      }
+      setGroup(0)
+      await wishService.deleteAll()
+      setWishes([])
+      await daycareService.changeDc(Dc)
+      await shiftService.clearGroups()
+      setShifts(await shiftService.getDefault(dcValue))
+      setDcTeams(await daycareService.getGroups(dcValue))
+      setEmployee(0)
+      setShift(0)
+      setDay(0)
     }
-    setGroup(0)
-    await wishService.deleteAll()
-    setWishes([])
-    await daycareService.changeDc(Dc)
-    setShifts(await shiftService.getDefault(dcValue))
-    setDcTeams(await daycareService.getGroups(dcValue))
-    setEmployee(0)
-    setShift(0)
-    setDay(0)
-  }
   }
 
   const postData = (event) => {
@@ -113,6 +108,9 @@ const App = () => {
     await wishService.postWish(wish)
     setShifts(await shiftService.getAll())
     setWishes(await wishService.getAll())
+    setEmployee(0)
+    setShift(0)
+    setDay(0)
   }
 
   const deleteWish = async id => {

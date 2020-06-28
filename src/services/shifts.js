@@ -16,4 +16,9 @@ const postData = (newObject) => {
     return request.then(response => response.data)
 }
 
-export default {getAll, getDefault, postData}
+const clearGroups = async() => {
+    const response = await axios.delete(baseUrl)
+    return response.data
+}
+
+export default {getAll, getDefault, postData, clearGroups}
