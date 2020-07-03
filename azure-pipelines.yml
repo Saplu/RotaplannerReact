@@ -15,10 +15,10 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+# - script: |
+#     npm install
+#     npm run build
+#   displayName: 'npm install and build'
 
 # - task: AzureFileCopy@4
 #   inputs:
@@ -27,7 +27,15 @@ steps:
 #     Destination: 'AzureBlob'
 #     storage: 'dcrotaplanner'
 #     ContainerName: '$web'
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: 'npm install'
 
+- task: Npm@1
+  inputs:
+    command: 'custom'
+    customCommand: 'npm run build'
 - task: AzureCLI@1
   displayName: Az file copy to storage
   inputs:
