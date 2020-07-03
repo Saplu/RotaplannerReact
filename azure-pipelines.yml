@@ -23,18 +23,18 @@ steps:
     npm run build
   displayName: 'npm build'
 
-# - task: AzureFileCopy@4
-#   inputs:
-#     SourcePath: D:\\a\\1\\s\\build
-#     azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
-#     Destination: 'AzureBlob'
-#     storage: 'dcrotaplanner'
-#     ContainerName: '$web'
-
-- task: AzureCLI@1
-  displayName: Az file copy to storage
+- task: AzureFileCopy@4
   inputs:
+    SourcePath: '$(System.DefaultWorkingDirectory)\build'
     azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
-    scriptLocation: inlineScript
-    inlineScript: |
-      az storage blob upload-batch --destination \$web --account-name "dcrotaplanner" --source "$(System.DefaultWorkingDirectory)\build"
+    Destination: 'AzureBlob'
+    storage: 'dcrotaplanner'
+    ContainerName: '$web'
+
+# - task: AzureCLI@1
+#   displayName: Az file copy to storage
+#   inputs:
+#     azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
+#     scriptLocation: inlineScript
+#     inlineScript: |
+#       az storage blob upload-batch --destination \$web --account-name "dcrotaplanner" --source "$(System.DefaultWorkingDirectory)\build"
