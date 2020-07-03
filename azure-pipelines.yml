@@ -34,4 +34,4 @@ steps:
     azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
     scriptLocation: inlineScript
     inlineScript: |
-      az storage blob upload-batch --destination \$web --account-name "dcrotaplanner" --source "$(System.DefaultWorkingDirectory)/build"
+      az storage blob upload-batch --destination \$web --account-name "dcrotaplanner" --source "$(System.DefaultWorkingDirectory)\build"
