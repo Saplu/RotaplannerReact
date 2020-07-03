@@ -19,12 +19,11 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
-- task: AzureRmWebAppDeployment@4
+
+- task: AzureFileCopy@4
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure subscription 1(1)(3cad1b87-75f7-4c52-a403-50c79c551795)'
-    appType: 'webApp'
-    WebAppName: 'dcrotaplanner'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    enableCustomDeployment: true
-    DeploymentType: 'webDeploy'
+    SourcePath: '$(System.DefaultWorkingDirectory)/build'
+    azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
+    Destination: 'AzureBlob'
+    storage: 'dcrotaplanner'
+    ContainerName: '$web'
