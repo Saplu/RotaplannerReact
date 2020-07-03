@@ -22,7 +22,7 @@ steps:
 
 - task: AzureFileCopy@4
   inputs:
-    SourcePath: D:\a\1\s\build
+    SourcePath: D:\\a\\1\\s\\build
     azureSubscription: 'Azure subscription 1(3cad1b87-75f7-4c52-a403-50c79c551795)'
     Destination: 'AzureBlob'
     storage: 'dcrotaplanner'
