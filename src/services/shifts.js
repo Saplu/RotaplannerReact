@@ -1,14 +1,14 @@
 import axios from 'axios'
-//const baseUrl = 'https://localhost:5001/api/DCShifts'
-const baseUrl = 'https://rotaplanner.azurewebsites.net/api/DCShifts'
+const baseUrl = 'https://localhost:5001/api/DCShifts'
+//const baseUrl = 'https://rotaplanner.azurewebsites.net/api/DCShifts'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
     return request.then(response => response.data)
 }
 
-const getDefault = (group) => {
-    const request = axios.get(`${baseUrl}/${group}`)
+const getShifts = (dc, group, creator = 'saplu', set = 'default') => {
+    const request = axios.get(`${baseUrl}/${dc}/${group}/${creator}/${set}`)
     return request.then(response => response.data)
 }
 
@@ -22,4 +22,4 @@ const clearGroups = async() => {
     return response.data
 }
 
-export default {getAll, getDefault, postData, clearGroups}
+export default {getAll, getShifts, postData, clearGroups}

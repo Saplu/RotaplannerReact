@@ -33,7 +33,7 @@ const App = () => {
 
   useEffect(() => {
     wishService
-      .getSpecific('saplu', 'notdefault')
+      .getSpecific('saplu', 'default')
       .then(newWishes => {
         setWishes(newWishes)
       })
@@ -70,11 +70,9 @@ const App = () => {
         Dc: dcValue
       }
       setGroup(0)
-      await wishService.deleteAll()
-      setWishes([])
       await daycareService.changeDc(Dc)
       await shiftService.clearGroups()
-      setShifts(await shiftService.getDefault(dcValue))
+      setShifts(await shiftService.getShifts(dcValue, 0))
       setDcTeams(await daycareService.getGroups(dcValue))
       setEmployee(0)
       setShift(0)
@@ -82,20 +80,9 @@ const App = () => {
     }
   }
 
-  const postData = (event) => {
+  const getShifts = async (event) => {
     event.preventDefault()
-    const groupObject = {
-      OpenGroup: group
-    }
-    shiftService
-    .postData(groupObject)
-      .then(returnedData => {
-        shiftService
-          .getAll()
-          .then(newShifts => {
-            setShifts(newShifts)
-          })
-      })
+    setShifts(await shiftService.getShifts(selectedDc, group))
   }
 
   const addWish = async (event) => {
@@ -108,8 +95,8 @@ const App = () => {
       Set: 'default'
     }
     await wishService.postWish(wish)
-    setShifts(await shiftService.getAll())
-    setWishes(await wishService.getAll())
+    setShifts(await shiftService.getShifts(selectedDc, group))
+    setWishes(await wishService.getSpecific('saplu', 'default'))
     setEmployee(0)
     setShift(0)
     setDay(0)
@@ -117,8 +104,8 @@ const App = () => {
 
   const deleteWish = async id => {
     await wishService.deleteWish(id)
-    setWishes(await wishService.getAll())
-    setShifts(await shiftService.getAll())
+    setWishes(await wishService.getSpecific('saplu', 'default'))
+    setShifts(await shiftService.getShifts(selectedDc, group))
   }
 
   return (
@@ -131,7 +118,7 @@ const App = () => {
           activateClick={handleGroupChange}
         />
         )}
-      <button onClick={postData}>Get shifts</button>
+      <button onClick={getShifts}>Get shifts</button>
     </div>
     <div>
       <form onSubmit={addWish}>
