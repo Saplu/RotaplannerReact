@@ -103,7 +103,9 @@ const App = () => {
     const wish = {
       EmpId: selectedEmployee,
       Shift: selectedShift,
-      Day: selectedDay
+      Day: selectedDay,
+      Creator: 'Saplu',
+      Set: 'default'
     }
     await wishService.postWish(wish)
     setShifts(await shiftService.getAll())
