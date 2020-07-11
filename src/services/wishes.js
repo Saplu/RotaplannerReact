@@ -8,8 +8,8 @@ const getAll = async () => {
     return wishes
 }
 
-const getSpecific = async set => {
-    const response = await axios.get(`${baseUrl}/${set}`)
+const getSpecific = async (creator, set) => {
+    const response = await axios.get(`${baseUrl}/${creator}/${set}`)
     const wishes = response.data
     return wishes
 }

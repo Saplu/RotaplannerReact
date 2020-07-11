@@ -33,7 +33,7 @@ const App = () => {
 
   useEffect(() => {
     wishService
-      .getAll()
+      .getSpecific('saplu', 'notdefault')
       .then(newWishes => {
         setWishes(newWishes)
       })
