@@ -4,7 +4,7 @@ const Wish = ({ deleteClick, wish }) => {
   
   const handleDeleteButtonClick = (event) => {
     event.preventDefault()
-    deleteClick(wish.id)
+    deleteClick(wish)
   }
 
    return (

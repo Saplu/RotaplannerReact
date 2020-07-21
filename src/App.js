@@ -17,19 +17,15 @@ const App = () => {
   const [dcTeams, setDcTeams] = useState([])
 
   useEffect(() => {
-    shiftService.getAll()
+    shiftService.getShifts(selectedDc, group)
       .then(newShifts => {
         setShifts(newShifts)
-      })
-    daycareService.getDefaultGroups()
-      .then(newDc => {
-        setDc(newDc)
       })
     daycareService.getGroups(selectedDc)
       .then(newGroups => {
         setDcTeams(newGroups)
       })
-  }, [selectedDc])
+  }, [selectedDc, group])
 
   useEffect(() => {
     wishService
@@ -71,7 +67,7 @@ const App = () => {
       }
       setGroup(0)
       await daycareService.changeDc(Dc)
-      await shiftService.clearGroups()
+      //await shiftService.clearGroups()
       setShifts(await shiftService.getShifts(dcValue, 0))
       setDcTeams(await daycareService.getGroups(dcValue))
       setEmployee(0)
@@ -91,7 +87,7 @@ const App = () => {
       EmpId: selectedEmployee,
       Shift: selectedShift,
       Day: selectedDay,
-      Creator: 'Saplu',
+      Creator: 'saplu',
       Set: 'default'
     }
     await wishService.postWish(wish)
@@ -102,8 +98,8 @@ const App = () => {
     setDay(0)
   }
 
-  const deleteWish = async id => {
-    await wishService.deleteWish(id)
+  const deleteWish = async wish => {
+    await wishService.deleteWish(wish)
     setWishes(await wishService.getSpecific('saplu', 'default'))
     setShifts(await shiftService.getShifts(selectedDc, group))
   }
