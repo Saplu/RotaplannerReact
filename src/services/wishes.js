@@ -26,9 +26,9 @@ const deleteWish = async wish => {
     return response.data
 }
 
-const deleteAll = async () => {
-    const response = await axios.delete(baseUrl)
+const deleteSet = async (creator, set) => {
+    const response = await axios.delete(`${baseUrl}/${creator}/${set}`)
     return response.data
 }
 
-export default {getAll, getSpecific, postWish, deleteWish, deleteAll}
+export default {getAll, getSpecific, postWish, deleteWish, deleteSet}

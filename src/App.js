@@ -15,25 +15,15 @@ const App = () => {
   const [wishes, setWishes] = useState([])
   const [selectedDc, setDc] = useState(0)
   const [dcTeams, setDcTeams] = useState([])
+  const [user, setUser] = useState('')
+  const [currentSet, setCurrentSet] = useState('default')
 
   useEffect(() => {
-    shiftService.getShifts(selectedDc, group)
-      .then(newShifts => {
-        setShifts(newShifts)
-      })
     daycareService.getGroups(selectedDc)
       .then(newGroups => {
         setDcTeams(newGroups)
       })
-  }, [selectedDc, group])
-
-  useEffect(() => {
-    wishService
-      .getSpecific('saplu', 'default')
-      .then(newWishes => {
-        setWishes(newWishes)
-      })
-  }, [])
+  }, [selectedDc])
 
   const handleEmployeeChange = (event) => {
     if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
@@ -52,6 +42,16 @@ const App = () => {
       setDay(Number(event.target.value))
     }
   }
+
+  const handleUserChange = (event) => {
+    event.preventDefault()
+    setUser(event.target.value)
+  }
+
+  const handleSetChange = (event) => {
+    event.preventDefault()
+    setCurrentSet(event.target.value)
+  }
   
   const handleGroupChange = async (event) => {
     await setGroup(event)
@@ -62,12 +62,7 @@ const App = () => {
     if (window.confirm("Sure you want to change daycare? Your selected options will be lost.")){
       const dcValue = (selectedDc === 0) ? 1 : 0
       setDc(dcValue)
-      const Dc = {
-        Dc: dcValue
-      }
       setGroup(0)
-      await daycareService.changeDc(Dc)
-      //await shiftService.clearGroups()
       setShifts(await shiftService.getShifts(dcValue, 0))
       setDcTeams(await daycareService.getGroups(dcValue))
       setEmployee(0)
@@ -83,25 +78,50 @@ const App = () => {
 
   const addWish = async (event) => {
     event.preventDefault()
-    const wish = {
-      EmpId: selectedEmployee,
-      Shift: selectedShift,
-      Day: selectedDay,
-      Creator: 'saplu',
-      Set: 'default'
+    if (user !== ''){
+      const wish = {
+        EmpId: selectedEmployee,
+        Shift: selectedShift,
+        Day: selectedDay,
+        Creator: user,
+        Set: currentSet
+      }
+      console.log(wish)
+      await wishService.postWish(wish)
+      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+      setWishes(await wishService.getSpecific(user, currentSet))
+      setEmployee(0)
+      setShift(0)
+      setDay(0)
     }
-    await wishService.postWish(wish)
-    setShifts(await shiftService.getShifts(selectedDc, group))
-    setWishes(await wishService.getSpecific('saplu', 'default'))
-    setEmployee(0)
-    setShift(0)
-    setDay(0)
+    else setShifts('Identify yourself')
   }
 
   const deleteWish = async wish => {
     await wishService.deleteWish(wish)
-    setWishes(await wishService.getSpecific('saplu', 'default'))
-    setShifts(await shiftService.getShifts(selectedDc, group))
+    setWishes(await wishService.getSpecific(user, currentSet))
+    setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+  }
+
+  const getWishes = async () => {
+    if (user.length > 0){
+      setWishes(await wishService.getSpecific(user, currentSet))
+      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet)) 
+      await wishService.deleteSet(user, 'default')
+      const newWishes = await wishService.getSpecific(user, currentSet)
+      newWishes.forEach(w => w.set = 'default')
+      await newWishes.forEach(w => wishService.postWish(w))
+      setCurrentSet('default')
+    }
+    else (setShifts('Identify yourself')) 
+  }
+
+  const deleteWishSet = async () => {
+    if (wishes.length !== 0){
+      await wishService.deleteSet(user, currentSet)
+      setWishes(await wishService.getSpecific(user, currentSet))
+      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+    }
   }
 
   return (
@@ -114,7 +134,10 @@ const App = () => {
           activateClick={handleGroupChange}
         />
         )}
-      <button onClick={getShifts}>Get shifts</button>
+      <button className="Padded" onClick={getShifts}>Get shifts</button>
+      <input className="Padded" value={user} onChange={handleUserChange}/>
+      <input className="Padded" value={currentSet} onChange={handleSetChange}/>
+      <button className="Padded" onClick={getWishes}>Get Wishes</button>
     </div>
     <div>
       <form onSubmit={addWish}>
@@ -153,6 +176,9 @@ const App = () => {
         deleteClick={deleteWish}
       />
       )}
+    </div>
+    <div>
+      <button onClick={deleteWishSet}>Delete all above wishes</button>
     </div>
   </div>
   );

@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Button = ({ team, activateClick }) => {
     const handleActivateClick = (event) => {
         event.preventDefault()
