@@ -1,6 +1,6 @@
 import axios from 'axios'
-//const baseUrl = 'https://localhost:5001/api/ShiftWishes'
-const baseUrl = 'https://rotaplanner.azurewebsites.net/api/ShiftWishes'
+const baseUrl = 'https://localhost:5001/api/ShiftWishes'
+//const baseUrl = 'https://rotaplanner.azurewebsites.net/api/ShiftWishes'
 
 const getAll = async () => {
     const response = await axios.get(baseUrl)

@@ -1,6 +1,6 @@
 import axios from 'axios'
-//const baseUrl = 'https://localhost:5001/api/DCShifts'
-const baseUrl = 'https://rotaplanner.azurewebsites.net/api/DCShifts'
+const baseUrl = 'https://localhost:5001/api/DCShifts'
+//const baseUrl = 'https://rotaplanner.azurewebsites.net/api/DCShifts'
 
 const getAll = () => {
     const request = axios.get(baseUrl)

@@ -10,8 +10,8 @@ const App = () => {
   const [shifts, setShifts] = useState('')
   const [group, setGroup] = useState(0)
   const [selectedEmployee, setEmployee] = useState(0)
-  const [selectedShift, setShift] = useState(0)
-  const [selectedDay, setDay] = useState(0)
+  const [selectedShift, setShift] = useState(1)
+  const [selectedDay, setDay] = useState(1)
   const [wishes, setWishes] = useState([])
   const [selectedDc, setDc] = useState(0)
   const [dcTeams, setDcTeams] = useState([])
@@ -32,13 +32,13 @@ const App = () => {
   }
 
   const handleShiftChange = (event) => {
-    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
+    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 && Number(event.target.value >= 1)){
       setShift(Number(event.target.value))
     }
   }
 
   const handleDayChange = (event) => {
-    if (!isNaN(event.target.value) && Number(event.target.value) <= 14){
+    if (!isNaN(event.target.value) && Number(event.target.value) <= 15 && Number(event.target.value) >= 1){
       setDay(Number(event.target.value))
     }
   }
@@ -66,8 +66,8 @@ const App = () => {
       setShifts(await shiftService.getShifts(dcValue, 0))
       setDcTeams(await daycareService.getGroups(dcValue))
       setEmployee(0)
-      setShift(0)
-      setDay(0)
+      setShift(1)
+      setDay(1)
     }
   }
 
@@ -81,8 +81,8 @@ const App = () => {
     if (user !== ''){
       const wish = {
         EmpId: selectedEmployee,
-        Shift: selectedShift,
-        Day: selectedDay,
+        Shift: selectedShift - 1,
+        Day: selectedDay - 1,
         Creator: user,
         Set: currentSet
       }
@@ -91,8 +91,8 @@ const App = () => {
       setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
       setWishes(await wishService.getSpecific(user, currentSet))
       setEmployee(0)
-      setShift(0)
-      setDay(0)
+      setShift(1)
+      setDay(1)
     }
     else setShifts('Identify yourself')
   }
@@ -163,7 +163,11 @@ const App = () => {
     </div>
     <div>
       {shifts.split('\n').map((i,key) => {
-        return <div key={key}>{i}</div>
+        console.log(i)
+        if (i.length === 0){
+          return <p key={key} style={{marginTop: 25}}></p>
+        }
+        return <pre key={key}>{i}</pre>
       })}
     </div>
     <div>
