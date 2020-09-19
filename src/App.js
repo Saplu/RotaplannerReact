@@ -4,11 +4,11 @@ import shiftService from './services/shifts'
 import wishService from './services/wishes'
 import daycareService from './services/DaycareService'
 import Wish from './components/wish'
-import GroupButton from './components/GroupButton'
+import GroupSelect from './components/GroupSelect'
+import { useSelector } from 'react-redux'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
-  const [group, setGroup] = useState(0)
   const [selectedEmployee, setEmployee] = useState(0)
   const [selectedShift, setShift] = useState(1)
   const [selectedDay, setDay] = useState(1)
@@ -17,6 +17,7 @@ const App = () => {
   const [dcTeams, setDcTeams] = useState([])
   const [user, setUser] = useState('')
   const [currentSet, setCurrentSet] = useState('default')
+  const testGroup = useSelector(state => state)
 
   useEffect(() => {
     daycareService.getGroups(selectedDc)
@@ -52,19 +53,13 @@ const App = () => {
     event.preventDefault()
     setCurrentSet(event.target.value)
   }
-  
-  const handleGroupChange = async (event) => {
-    await setGroup(event)
-  }
 
   const handleDcChange = async (event) => {
     event.preventDefault()
     if (window.confirm("Sure you want to change daycare? Your selected options will be lost.")){
       const dcValue = (selectedDc === 0) ? 1 : 0
       setDc(dcValue)
-      setGroup(0)
       setShifts(await shiftService.getShifts(dcValue, 0))
-      setDcTeams(await daycareService.getGroups(dcValue))
       setEmployee(0)
       setShift(1)
       setDay(1)
@@ -73,7 +68,7 @@ const App = () => {
 
   const getShifts = async (event) => {
     event.preventDefault()
-    setShifts(await shiftService.getShifts(selectedDc, group))
+    setShifts(await shiftService.getShifts(selectedDc, testGroup))
   }
 
   const addWish = async (event) => {
@@ -88,7 +83,7 @@ const App = () => {
       }
       console.log(wish)
       await wishService.postWish(wish)
-      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
       setWishes(await wishService.getSpecific(user, currentSet))
       setEmployee(0)
       setShift(1)
@@ -100,13 +95,13 @@ const App = () => {
   const deleteWish = async wish => {
     await wishService.deleteWish(wish)
     setWishes(await wishService.getSpecific(user, currentSet))
-    setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+    setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
   }
 
   const getWishes = async () => {
     if (user.length > 0){
       setWishes(await wishService.getSpecific(user, currentSet))
-      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet)) 
+      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet)) 
       await wishService.deleteSet(user, 'default')
       const newWishes = await wishService.getSpecific(user, currentSet)
       newWishes.forEach(w => w.set = 'default')
@@ -120,7 +115,7 @@ const App = () => {
     if (wishes.length !== 0){
       await wishService.deleteSet(user, currentSet)
       setWishes(await wishService.getSpecific(user, currentSet))
-      setShifts(await shiftService.getShifts(selectedDc, group, user, currentSet))
+      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
     }
   }
 
@@ -128,12 +123,7 @@ const App = () => {
     <div>
     <p>Select opening group:</p>
     <div>
-      {dcTeams.map(team => 
-        <GroupButton key={team}
-          team={team}
-          activateClick={handleGroupChange}
-        />
-        )}
+      <GroupSelect count={dcTeams.length}/>
       <button className="Padded" onClick={getShifts}>Get shifts</button>
       <input className="Padded" value={user} onChange={handleUserChange}/>
       <input className="Padded" value={currentSet} onChange={handleSetChange}/>
@@ -163,7 +153,6 @@ const App = () => {
     </div>
     <div>
       {shifts.split('\n').map((i,key) => {
-        console.log(i)
         if (i.length === 0){
           return <p key={key} style={{marginTop: 25}}></p>
         }
