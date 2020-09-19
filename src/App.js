@@ -121,59 +121,59 @@ const App = () => {
 
   return (
     <div>
-    <p>Select opening group:</p>
-    <div>
-      <GroupSelect count={dcTeams.length}/>
-      <button className="Padded" onClick={getShifts}>Get shifts</button>
-      <input className="Padded" value={user} onChange={handleUserChange}/>
-      <input className="Padded" value={currentSet} onChange={handleSetChange}/>
-      <button className="Padded" onClick={getWishes}>Get Wishes</button>
-    </div>
-    <div>
-      <form onSubmit={addWish}>
-        <div>
-          <button type="submit">Add Wish</button>
-        </div>
-        <div>
+      <p>Select opening group:</p>
+      <div>
+        <GroupSelect count={dcTeams.length}/>
+        <button className="Padded" onClick={getShifts}>Get shifts</button>
+        <input className="Padded" value={user} onChange={handleUserChange}/>
+        <input className="Padded" value={currentSet} onChange={handleSetChange}/>
+        <button className="Padded" onClick={getWishes}>Get Wishes</button>
+      </div>
+      <div>
+        <form onSubmit={addWish}>
+          <div>
+            <button type="submit">Add Wish</button>
+          </div>
+          <div>
           Employee: <input
-          value={selectedEmployee}
-          onChange={handleEmployeeChange}/>
-        </div>
-        <div>
+              value={selectedEmployee}
+              onChange={handleEmployeeChange}/>
+          </div>
+          <div>
           Wanted Shift: <input
-          value={selectedShift}
-          onChange={handleShiftChange}/>
-        </div>
-        <div>
+              value={selectedShift}
+              onChange={handleShiftChange}/>
+          </div>
+          <div>
           Day: <input
-          value={selectedDay}
-          onChange={handleDayChange}/>
-        </div>
-      </form>
+              value={selectedDay}
+              onChange={handleDayChange}/>
+          </div>
+        </form>
+      </div>
+      <div>
+        {shifts.split('\n').map((i,key) => {
+          if (i.length === 0){
+            return <p key={key} style={{marginTop: 25}}></p>
+          }
+          return <pre key={key}>{i}</pre>
+        })}
+      </div>
+      <div>
+        <button onClick={handleDcChange}>change daycare</button>
+      </div>
+      <div>
+        {wishes.map(wish =>
+          <Wish key={wish.id}
+            wish={wish}
+            deleteClick={deleteWish}
+          />
+        )}
+      </div>
+      <div>
+        <button onClick={deleteWishSet}>Delete all above wishes</button>
+      </div>
     </div>
-    <div>
-      {shifts.split('\n').map((i,key) => {
-        if (i.length === 0){
-          return <p key={key} style={{marginTop: 25}}></p>
-        }
-        return <pre key={key}>{i}</pre>
-      })}
-    </div>
-    <div>
-      <button onClick={handleDcChange}>change daycare</button>
-    </div>
-    <div>
-      {wishes.map(wish =>
-        <Wish key={wish.id}
-        wish={wish}
-        deleteClick={deleteWish}
-      />
-      )}
-    </div>
-    <div>
-      <button onClick={deleteWishSet}>Delete all above wishes</button>
-    </div>
-  </div>
   );
 }
 

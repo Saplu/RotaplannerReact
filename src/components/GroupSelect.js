@@ -12,16 +12,16 @@ const GroupButtons = ({count}) => {
   }
 
   const handleGroupChange = (event) => {
-      const group = event
-      dispatch(changeGroup(group))
+    const group = event
+    dispatch(changeGroup(group))
   }
 
   return(
     <div>
       {groups.map(g => 
         <GroupButton key={g}
-        team={g}
-        activateClick={handleGroupChange}
+          team={g}
+          activateClick={handleGroupChange}
         />
       )}
     </div>

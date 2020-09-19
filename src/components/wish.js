@@ -7,11 +7,11 @@ const Wish = ({ deleteClick, wish }) => {
     deleteClick(wish)
   }
 
-   return (
-     <div>
+  return (
+    <div>
        Id: {wish.empId}, Shift: {wish.shift + 1}, Day: {wish.day + 1} <button onClick={handleDeleteButtonClick}>Remove</button>
-     </div>
-   )
+    </div>
+  )
 }
 
 export default Wish
