@@ -13,18 +13,11 @@ const App = () => {
   const [selectedShift, setShift] = useState(1)
   const [selectedDay, setDay] = useState(1)
   const [wishes, setWishes] = useState([])
-  const [selectedDc, setDc] = useState(0)
-  const [dcTeams, setDcTeams] = useState([])
   const [user, setUser] = useState('')
   const [currentSet, setCurrentSet] = useState('default')
-  const testGroup = useSelector(state => state)
-
-  useEffect(() => {
-    daycareService.getGroups(selectedDc)
-      .then(newGroups => {
-        setDcTeams(newGroups)
-      })
-  }, [selectedDc])
+  const testGroup = useSelector(state => state[0])
+  const testDc = useSelector(state => state[1])
+  const dcTeams = useSelector(state => state[2])
 
   const handleEmployeeChange = (event) => {
     if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
@@ -33,7 +26,7 @@ const App = () => {
   }
 
   const handleShiftChange = (event) => {
-    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 && Number(event.target.value >= 1)){
+    if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3){
       setShift(Number(event.target.value))
     }
   }
@@ -54,21 +47,9 @@ const App = () => {
     setCurrentSet(event.target.value)
   }
 
-  const handleDcChange = async (event) => {
-    event.preventDefault()
-    if (window.confirm("Sure you want to change daycare? Your selected options will be lost.")){
-      const dcValue = (selectedDc === 0) ? 1 : 0
-      setDc(dcValue)
-      setShifts(await shiftService.getShifts(dcValue, 0))
-      setEmployee(0)
-      setShift(1)
-      setDay(1)
-    }
-  }
-
   const getShifts = async (event) => {
     event.preventDefault()
-    setShifts(await shiftService.getShifts(selectedDc, testGroup))
+    setShifts(await shiftService.getShifts(testDc, testGroup))
   }
 
   const addWish = async (event) => {
@@ -83,7 +64,7 @@ const App = () => {
       }
       console.log(wish)
       await wishService.postWish(wish)
-      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
+      setShifts(await shiftService.getShifts(testDc, testGroup, user, currentSet))
       setWishes(await wishService.getSpecific(user, currentSet))
       setEmployee(0)
       setShift(1)
@@ -95,13 +76,13 @@ const App = () => {
   const deleteWish = async wish => {
     await wishService.deleteWish(wish)
     setWishes(await wishService.getSpecific(user, currentSet))
-    setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
+    setShifts(await shiftService.getShifts(testDc, testGroup, user, currentSet))
   }
 
   const getWishes = async () => {
     if (user.length > 0){
       setWishes(await wishService.getSpecific(user, currentSet))
-      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet)) 
+      setShifts(await shiftService.getShifts(testDc, testGroup, user, currentSet)) 
       await wishService.deleteSet(user, 'default')
       const newWishes = await wishService.getSpecific(user, currentSet)
       newWishes.forEach(w => w.set = 'default')
@@ -115,7 +96,7 @@ const App = () => {
     if (wishes.length !== 0){
       await wishService.deleteSet(user, currentSet)
       setWishes(await wishService.getSpecific(user, currentSet))
-      setShifts(await shiftService.getShifts(selectedDc, testGroup, user, currentSet))
+      setShifts(await shiftService.getShifts(testDc, testGroup, user, currentSet))
     }
   }
 
@@ -158,9 +139,6 @@ const App = () => {
           }
           return <pre key={key}>{i}</pre>
         })}
-      </div>
-      <div>
-        <button onClick={handleDcChange}>change daycare</button>
       </div>
       <div>
         {wishes.map(wish =>

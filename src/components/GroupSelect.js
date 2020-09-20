@@ -1,19 +1,22 @@
 import React from 'react'
 import GroupButton from '../components/GroupButton'
-import { changeGroup } from '../reducers/groupReducer'
-import { useDispatch } from 'react-redux'
+import { changeGroup, changeDc } from '../reducers/groupReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import '../App.css';
 
 const GroupButtons = ({count}) => {
   const dispatch = useDispatch()
-  let groups = []
-  let i = 0
-  for (i = 0; i < count; i++){
-    groups[i] = i
-  }
+  let groups = useSelector(state => state[2])
+  let currentDc = useSelector(state => state[1])
 
   const handleGroupChange = (event) => {
     const group = event
     dispatch(changeGroup(group))
+  }
+
+  const handleDcChange = () => {
+    currentDc === 0 ? currentDc = 1 : currentDc = 0
+    dispatch(changeDc(currentDc))
   }
 
   return(
@@ -24,6 +27,7 @@ const GroupButtons = ({count}) => {
           activateClick={handleGroupChange}
         />
       )}
+      <button onClick={handleDcChange} className="Padded">Change Daycare</button>
     </div>
   )
 }
