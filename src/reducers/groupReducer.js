@@ -1,14 +1,13 @@
 import daycareService from '../services/DaycareService'
 
-const reducer = (state=[0, 0, [0, 1, 2, 3]], action) => {
+const reducer = (state={selectedGroup: 0, selectedDaycare: 0, groups: [0, 1, 2, 3]}, action) => {
   switch(action.type) {
   case'CHANGE_GROUP':
-    state[0] = action.data
+    state = {...state, selectedGroup: action.data}
     console.log(state)
     return state
   case'CHANGE_DC':
-    state[1] = action.dc
-    state[2] = action.groups
+    state = {...state, selectedDaycare: action.dc, groups: action.groups}
     console.log(state)
     return state
   default: return state

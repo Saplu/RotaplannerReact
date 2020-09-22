@@ -2,10 +2,10 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import shiftService from './services/shifts'
 import wishService from './services/wishes'
-import daycareService from './services/DaycareService'
 import Wish from './components/wish'
 import GroupSelect from './components/GroupSelect'
 import { useSelector } from 'react-redux'
+import WishForm from './components/WishForm'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
@@ -15,9 +15,12 @@ const App = () => {
   const [wishes, setWishes] = useState([])
   const [user, setUser] = useState('')
   const [currentSet, setCurrentSet] = useState('default')
-  const testGroup = useSelector(state => state[0])
-  const testDc = useSelector(state => state[1])
-  const dcTeams = useSelector(state => state[2])
+  const testGroup = useSelector(state => state.groups.selectedGroup)
+  const testDc = useSelector(state => state.groups.selectedDaycare)
+  const dcTeams = useSelector(state => state.groups.groups)
+
+  const state = useSelector(state => state)
+  console.log(state)
 
   const handleEmployeeChange = (event) => {
     if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
@@ -110,6 +113,7 @@ const App = () => {
         <input className="Padded" value={currentSet} onChange={handleSetChange}/>
         <button className="Padded" onClick={getWishes}>Get Wishes</button>
       </div>
+      <WishForm/>
       <div>
         <form onSubmit={addWish}>
           <div>

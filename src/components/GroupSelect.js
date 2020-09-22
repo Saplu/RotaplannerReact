@@ -4,10 +4,10 @@ import { changeGroup, changeDc } from '../reducers/groupReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import '../App.css';
 
-const GroupButtons = ({count}) => {
+const GroupButtons = () => {
   const dispatch = useDispatch()
-  let groups = useSelector(state => state[2])
-  let currentDc = useSelector(state => state[1])
+  let groups = useSelector(state => state.groups.groups)
+  let currentDc = useSelector(state => state.groups.selectedDaycare)
 
   const handleGroupChange = (event) => {
     const group = event
