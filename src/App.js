@@ -6,6 +6,7 @@ import Wish from './components/wish'
 import GroupSelect from './components/GroupSelect'
 import { useSelector } from 'react-redux'
 import WishForm from './components/WishForm'
+import Identification from './components/IdForm'
 
 const App = () => {
   const [shifts, setShifts] = useState('')
@@ -20,7 +21,8 @@ const App = () => {
   const dcTeams = useSelector(state => state.groups.groups)
 
   const state = useSelector(state => state)
-  console.log(state)
+  //console.log(state.wishes)
+  //console.log(state.id)
 
   const handleEmployeeChange = (event) => {
     if (!isNaN(event.target.value) && Number(event.target.value) <= dcTeams.length * 3 - 1){
@@ -113,6 +115,7 @@ const App = () => {
         <input className="Padded" value={currentSet} onChange={handleSetChange}/>
         <button className="Padded" onClick={getWishes}>Get Wishes</button>
       </div>
+      <Identification/>
       <WishForm/>
       <div>
         <form onSubmit={addWish}>

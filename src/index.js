@@ -6,12 +6,14 @@ import './index.css';
 import App from './App';
 import groupReducer from './reducers/groupReducer';
 import wishReducer from './reducers/wishReducer';
+import idReducer from './reducers/idReducer';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const reducer = combineReducers({
   wishes: wishReducer,
-  groups: groupReducer
+  groups: groupReducer,
+  id: idReducer
 })
 
 const store = createStore(

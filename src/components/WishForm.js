@@ -1,9 +1,11 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addWish } from '../reducers/wishReducer'
 
 const NewWish = () => {
     const dispatch = useDispatch()
+    const creator = useSelector(state => state.id.name)
+    const set = useSelector(state => state.id.set)
 
     const add = (event) => {
         event.preventDefault()
@@ -11,8 +13,8 @@ const NewWish = () => {
             EmpId: Number(event.target.emp.value),
             Shift: event.target.shift.value - 1,
             Day: event.target.day.value - 1,
-            Creator: 'Saplu',
-            Set: 'default'
+            Creator: creator,
+            Set: set
         }
         console.log(wish)
         dispatch(addWish(wish))
