@@ -1,11 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addWish } from '../reducers/wishReducer'
+import { addWish, deleteWish } from '../reducers/wishReducer'
+import Wish from '../components/wish'
 
 const NewWish = () => {
     const dispatch = useDispatch()
     const creator = useSelector(state => state.id.name)
     const set = useSelector(state => state.id.set)
+    const wishes = useSelector(state => state.wishes.wishes)
 
     const add = (event) => {
         event.preventDefault()
@@ -16,11 +18,15 @@ const NewWish = () => {
             Creator: creator,
             Set: set
         }
-        console.log(wish)
         dispatch(addWish(wish))
     }
 
+    const handleWishDelete = wish => {
+        dispatch(deleteWish(wish))
+    }
+
     return (
+        <div>
         <form onSubmit={add}>
             <div>
                 <button type="submit">Add Wish</button>
@@ -35,6 +41,13 @@ const NewWish = () => {
                 Day: <input name="day" defaultValue="1"/>
             </div>
         </form>
+        {wishes.map(wish =>
+            <Wish key={wish.id}
+                wish={wish}
+                deleteClick={handleWishDelete}
+            />
+        )}
+        </div>
     )
 }
 
