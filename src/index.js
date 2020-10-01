@@ -8,6 +8,7 @@ import groupReducer from './reducers/groupReducer';
 import wishReducer from './reducers/wishReducer';
 import idReducer from './reducers/idReducer';
 import shiftReducer from './reducers/shiftReducer';
+import errorReducer from './reducers/errorReducer';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   wishes: wishReducer,
   groups: groupReducer,
   id: idReducer,
-  shifts: shiftReducer
+  shifts: shiftReducer,
+  error: errorReducer
 })
 
 const store = createStore(

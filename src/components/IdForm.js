@@ -36,7 +36,7 @@ const Identification = () => {
     return (
         <div>
             <button className="Padded" onClick={getServerShifts}>Get Shifts</button>
-            <input className="Padded" defaultValue="saplu" onChange={handleNameChange}/>
+            <input className="Padded" defaultValue="" onChange={handleNameChange}/>
             <input className="Padded" defaultValue="default" onChange={handleSetChange}/>
             <button className="Padded" onClick={getDbWishes}>Get Wishes</button>
         </div>
