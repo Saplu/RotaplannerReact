@@ -1,10 +1,16 @@
 import React from 'react'
 import '../App.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changeName, changeSet } from '../reducers/idReducer'
+import { getWishes } from '../reducers/wishReducer'
+import { getShifts } from '../reducers/shiftReducer'
 
 const Identification = () => {
     const dispatch = useDispatch()
+    const set = useSelector(state => state.id.set)
+    const name = useSelector(state => state.id.name)
+    const group = useSelector(state => state.groups.selectedGroup)
+    const dc = useSelector(state => state.groups.selectedDaycare)
 
     const handleNameChange = (event) => {
         event.preventDefault()
@@ -16,10 +22,23 @@ const Identification = () => {
         dispatch(changeSet(event.target.value))
     }
 
+    const getServerShifts = async (event) => {
+        event.preventDefault()
+        dispatch(getShifts({dc: dc, group: group, creator: name, set: set, up: 0}))
+    }
+
+    const getDbWishes = async (event) => {
+        event.preventDefault()
+        console.log(`getting wishes name: ${name} set: ${set}`)
+        dispatch(getWishes({creator: name, set: set}))
+    }
+
     return (
         <div>
-            <input className="Padded" defaultValue="Saplu" onChange={handleNameChange}/>
+            <button className="Padded" onClick={getServerShifts}>Get Shifts</button>
+            <input className="Padded" defaultValue="saplu" onChange={handleNameChange}/>
             <input className="Padded" defaultValue="default" onChange={handleSetChange}/>
+            <button className="Padded" onClick={getDbWishes}>Get Wishes</button>
         </div>
     )
 }

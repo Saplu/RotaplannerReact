@@ -7,13 +7,15 @@ import App from './App';
 import groupReducer from './reducers/groupReducer';
 import wishReducer from './reducers/wishReducer';
 import idReducer from './reducers/idReducer';
+import shiftReducer from './reducers/shiftReducer';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 const reducer = combineReducers({
   wishes: wishReducer,
   groups: groupReducer,
-  id: idReducer
+  id: idReducer,
+  shifts: shiftReducer
 })
 
 const store = createStore(
