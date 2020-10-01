@@ -7,7 +7,7 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const getShifts = (dc, group, creator = 'saplu', set = 'default', up = 0) => {
+const getShifts = async (dc, group, creator = 'saplu', set = 'default', up = 0) => {
   const request = axios.get(`${baseUrl}/${dc}/${group}/${creator}/${set}/${up}`)
   return request.then(response => response.data)
 }
