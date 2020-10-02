@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeName, changeSet } from '../reducers/idReducer'
-import { getWishes } from '../reducers/wishReducer'
+import { getWishes, deleteSet } from '../reducers/wishReducer'
 import { getShifts } from '../reducers/shiftReducer'
 import { modifyError } from '../reducers/errorReducer'
 
@@ -37,14 +37,19 @@ const Identification = () => {
 
     const getDbWishes = async (event) => {
         event.preventDefault()
-        dispatch(getWishes({creator: name, set: set}))
+        if (name.length === 0){
+            dispatch(modifyError('Identify yourself'))
+        }
+        else {
+            dispatch(getWishes({creator: name, set: set}))
+        }
     }
 
     return (
         <div>
             <button className="Padded" onClick={getServerShifts}>Get Shifts</button>
             <input className="Padded" defaultValue="" onChange={handleNameChange}/>
-            <input className="Padded" defaultValue="default" onChange={handleSetChange}/>
+            <input className="Padded" value={set} onChange={handleSetChange}/>
             <button className="Padded" onClick={getDbWishes}>Get Wishes</button>
         </div>
     )

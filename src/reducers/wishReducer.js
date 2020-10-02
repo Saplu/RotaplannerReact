@@ -11,6 +11,9 @@ const reducer = (state={emp: 0, shift: 1, day: 1, wishes: []}, action) => {
         case "GET_WISHES":
             state = {...state, wishes: action.data}
             return state
+        case "DELETE_WISHES":
+            state = {...state, wishes: []}
+            return state
         default: return state 
     }
 }
@@ -43,6 +46,15 @@ export const getWishes = ({creator, set}) => {
         dispatch({
             type: "GET_WISHES",
             data: wishes
+        })
+    }
+}
+
+export const deleteSet = ({creator, set}) => {
+    return async dispatch => {
+        await WishService.deleteSet(creator, set)
+        dispatch({
+            type: "DELETE_WISHES"
         })
     }
 }
