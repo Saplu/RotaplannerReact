@@ -2,12 +2,6 @@ import axios from 'axios'
 const baseUrl = 'https://localhost:5001/api/ShiftWishes'
 //const baseUrl = 'https://rotaplanner.azurewebsites.net/api/ShiftWishes'
 
-const getAll = async () => {
-  const response = await axios.get(baseUrl)
-  const wishes = response.data
-  return wishes
-}
-
 const getSpecific = async (creator, set) => {
   const response = await axios.get(`${baseUrl}/${creator}/${set}`)
   const wishes = response.data
@@ -30,4 +24,4 @@ const deleteSet = async (creator, set) => {
   return response.data
 }
 
-export default {getAll, getSpecific, postWish, deleteWish, deleteSet}
+export default {getSpecific, postWish, deleteWish, deleteSet}
