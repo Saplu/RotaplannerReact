@@ -4,11 +4,9 @@ const reducer = (state={selectedGroup: 0, selectedDaycare: 0, groups: [0, 1, 2, 
   switch(action.type) {
   case'CHANGE_GROUP':
     state = {...state, selectedGroup: action.data}
-    console.log(state)
     return state
   case'CHANGE_DC':
     state = {...state, selectedDaycare: action.dc, groups: action.groups}
-    console.log(state)
     return state
   default: return state
   }

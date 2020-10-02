@@ -7,9 +7,9 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const getShifts = async (dc, group, creator = 'saplu', set = 'default', up = 0) => {
-  const request = axios.get(`${baseUrl}/${dc}/${group}/${creator}/${set}/${up}`)
-  return request.then(response => response.data)
+const getShifts = async (dc, group, creator, set = 'default', up = 0) => {
+  const response = await axios.get(`${baseUrl}/${dc}/${group}/${creator}/${set}/${up}`)
+  return response.data
 }
 
 const postData = (newObject) => {

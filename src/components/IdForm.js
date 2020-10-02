@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { changeName, changeSet } from '../reducers/idReducer'
 import { getWishes } from '../reducers/wishReducer'
 import { getShifts } from '../reducers/shiftReducer'
+import { modifyError } from '../reducers/errorReducer'
 
 const Identification = () => {
     const dispatch = useDispatch()
@@ -24,12 +25,18 @@ const Identification = () => {
 
     const getServerShifts = async (event) => {
         event.preventDefault()
-        dispatch(getShifts({dc: dc, group: group, creator: name, set: set, up: 0}))
+        console.log(name)
+        if (name.length === 0){
+            dispatch(modifyError('Identify yourself'))
+        }
+        else{
+            dispatch(getShifts({dc: dc, group: group, creator: name, set: set, up: 0}))
+            dispatch(modifyError(''))
+        }
     }
 
     const getDbWishes = async (event) => {
         event.preventDefault()
-        console.log(`getting wishes name: ${name} set: ${set}`)
         dispatch(getWishes({creator: name, set: set}))
     }
 

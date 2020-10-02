@@ -20,8 +20,8 @@ const postWish = async newObject => {
   return wish
 }
 
-const deleteWish = async wish => {
-  const response = await axios.delete(`${baseUrl}/${wish.creator}/${wish.set}/${wish.day}/${wish.shift}/${wish.empId}`)
+const deleteWish = async id => {
+  const response = await axios.delete(`${baseUrl}/${id}`)
   return response.data
 }
 

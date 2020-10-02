@@ -1,4 +1,4 @@
-const reducer = (state={name: "Saplu", set: "default"}, action) => {
+const reducer = (state={name: "", set: "default"}, action) => {
     switch(action.type) {
         case "CHANGE_NAME":
             state = {...state, name: action.data}

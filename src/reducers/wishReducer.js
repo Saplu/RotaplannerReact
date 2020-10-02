@@ -28,7 +28,7 @@ export const addWish = (newWish) => {
 
 export const deleteWish = (wish) => {
     return async dispatch => {
-        await WishService.deleteWish(wish)
+        await WishService.deleteWish(wish.id)
         const wishes = await WishService.getSpecific(wish.creator, wish.set)
         dispatch({
             type: "DELETE_WISH",

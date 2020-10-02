@@ -14,7 +14,6 @@ const NewWish = () => {
 
     const add = (event) => {
         event.preventDefault()
-        console.log(groups)
         if (isNaN(event.target.emp.value)){
             dispatch(modifyError('Cannot convert employee to a number'))
         }

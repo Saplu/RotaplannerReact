@@ -4,6 +4,7 @@ const reducer = (state = '', action) => {
     switch(action.type){
         case "GET_SHIFTS":
             state = action.data
+            console.log(state)
             return state
         default: return state
     }
